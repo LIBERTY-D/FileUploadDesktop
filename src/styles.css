@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@layer base {
+  /* input {
+    @apply border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300;
+  } */
+
+  button,label[for='files']{
+     @apply border-cyan-300 bg-cyan-500 text-white cursor-pointer py-2 p-1 rounded-md border-0
+  }
+
+  
+}

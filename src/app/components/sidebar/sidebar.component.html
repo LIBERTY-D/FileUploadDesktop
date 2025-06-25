@@ -1,0 +1,30 @@
+<aside class="bg-gray-100 h-screen text-gray-400 flex flex-col justify-between p-5">
+  <div>
+    <!-- logo and action -->
+    <div>
+      <h1 class="text-3xl italic">FileUploader Desktop</h1>
+
+      <form class="file-upload-container mt-5" enctype="multipart/form-data">
+        <input type="file" name="files" id="files" multiple hidden (change)="onUploadFiles($event)" />
+        <label for="files" class="border p-2 rounded capitalize flex cursor-pointer w-fit">
+          <span class="material-icons">add</span> new
+        </label>
+      </form>
+    </div>
+
+    <!-- navigation items -->
+    <ul class="mt-5 space-y-3">
+      <li class="flex items-center cursor-pointer" (click)="onClickSiderBarImpl(0)">
+        <span class="material-icons">home</span><span class="ml-3">Home</span>
+      </li>
+      <li class="flex items-center cursor-pointer" (click)="onClickSiderBarImpl(1)">
+        <span class="material-icons">delete</span><span class="ml-3">Recently deleted</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- logout section -->
+  <div>
+    <button  *ngIf="user" class="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600" (click)="logout()">Logout</button>
+  </div>
+</aside>

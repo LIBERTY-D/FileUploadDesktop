@@ -1,0 +1,151 @@
+<div class="overflow-x-auto mt-10 h-screen">
+  <app-progress-bar
+    *ngIf="fileStatus?.status === 'progress' && fileStatus?.show"
+    [progress]="fileStatus?.percent"
+    [statusText]="fileStatus?.requestType"
+  />
+  <app-modal
+    *ngIf="modalaData.show"
+    [modalData]="modalaData"
+    (closeModalEvent)="onDeleteFilesWhenConfirmIsClicked($event)"
+  >
+  </app-modal>
+
+  <div
+    class="flex justify-end my-3 gap-1"
+  >
+    <button
+      
+      class="py-1 px-2"
+      (click)="onShowModalBeforeDelete('all')"
+      *ngIf="clickedSiderBarComponent.valueOf() === 0 && userfilesDataArray.length>0"
+    >
+      remove all files
+    </button>
+    <button
+      *ngIf="clickedSiderBarComponent.valueOf() === 1 && userTrashFilesDataArray.length>0"
+      class="py-1 px-2"
+      (click)="onShowModalBeforeDelete('trash')"
+    >
+      remove all files in trash
+    </button>
+  </div>
+  @if (clickedSiderBarComponent.valueOf()===0) {
+  @if(userfilesDataArray.length==0){
+  <div class="flex justify-center items-center mt-[10%]">
+    Your Haven't Uploaded Any Files
+  </div>
+  } @else {
+  <table class="min-w-full table-auto border border-gray-200">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="text-left px-6 py-3">Name</th>
+        <th class="text-left px-20 py-3">Created</th>
+        <th class="text-left px-6 py-3">File Size (KB)</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-800">
+      @for (file of userfilesDataArray; track $index) {
+      <tr class="group relative border-t border-gray-200 hover:bg-gray-50">
+        <td class="px-6 py-4 relative">
+          <a href="#" class="text-blue-600 hover:underline cursor-pointer">
+            {{ file.fileName }}
+          </a>
+          <!-- Hover Popup -->
+          <div
+            class="absolute left-1.5 top-10 ml-2 hidden group-hover:flex flex-col gap-1 bg-white shadow-lg border border-gray-100 rounded-md p-3 z-10 *:cursor-pointer"
+          >
+            <button
+              class="text-sm hover:text-blue-600 text-left"
+              (click)="onClickPreview(file.fileId)"
+            >
+              🔍 Preview
+            </button>
+            <button
+              class="text-sm hover:text-green-600 text-left"
+              (click)="onClickDownload(file.fileId)"
+            >
+              ⬇️ Download
+            </button>
+            <button
+              class="text-sm hover:text-red-600 text-left"
+              (click)="onClickAndPutInTrash(file.fileId)"
+            >
+              ❌ trash
+            </button>
+          </div>
+        </td>
+        <td class="px-20 py-4">{{ file.createdAt }}</td>
+        <td class="px-6 py-4">{{ file.fileSize | bytesToKiloBytes : 3 }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  } }@else { @if(userTrashFilesDataArray.length==0){
+  <div class="flex justify-center items-center mt-[10%]">
+     No Files In Trash
+  </div>
+  }@else {
+  <table class="min-w-full table-auto border border-gray-200">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="text-left px-6 py-3">Name</th>
+        <th class="text-left px-20 py-3">Created</th>
+        <th class="text-left px-6 py-3">File Size (KB)</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-800">
+      @for (file of userTrashFilesDataArray; track $index) {
+      <tr class="group relative border-t border-gray-200 hover:bg-gray-50">
+        <td class="px-6 py-4 relative">
+          <a href="#" class="text-blue-600 hover:underline cursor-pointer">
+            {{ file.fileName }}
+          </a>
+          <!-- Hover Popup -->
+          <div
+            class="absolute left-1.5 top-10 ml-2 hidden group-hover:flex flex-col gap-1 bg-white shadow-lg border border-gray-100 rounded-md p-3 z-10 *:cursor-pointer"
+          >
+            <button
+              class="text-sm hover:text-blue-600 text-left"
+              (click)="onClickPreview(file.fileId)"
+            >
+              🔍 Preview
+            </button>
+            <button
+              class="text-sm hover:text-green-600 text-left"
+              (click)="onClickDownload(file.fileId)"
+            >
+              ⬇️ Download
+            </button>
+            <button
+              class="text-sm hover:text-red-600 text-left"
+              (click)="onClickRestoreFile(file.fileId)"
+            >
+              🔄 restore file
+            </button>
+            <button
+              class="text-sm hover:text-red-600 text-left"
+              (click)="onClickPermanentlyDeleteFile(file.fileId)"
+            >
+              ❌ permanently delete
+            </button>
+          </div>
+        </td>
+        <td class="px-20 py-4">{{ file.createdAt }}</td>
+        <td class="px-6 py-4">{{ file.fileSize | bytesToKiloBytes : 3 }}</td>
+        <td></td>
+      </tr>
+
+      }
+    </tbody>
+  </table>
+  } }
+  <app-file-preview
+    [showModal]="showModal"
+    [fileBlob]="previewBlob"
+    [fileName]="previewName"
+    [fileMimeType]="previewType"
+    (closed)="handleModalClose()"
+  >
+  </app-file-preview>
+</div>

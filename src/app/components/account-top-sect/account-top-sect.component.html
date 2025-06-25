@@ -1,0 +1,10 @@
+<section
+  class="mr-0 mt-1.5 h-16 w-16 border-2 border-gray-200 rounded-full overflow-hidden cursor-pointer"
+  (click)="goToAccountPage()"
+>
+  <img
+    [src]="user?.profilePicture ? user?.profilePicture : 'assets/blank.jpg'"
+    class="w-24 h-24 object-cover"
+    alt=""
+  />
+</section>

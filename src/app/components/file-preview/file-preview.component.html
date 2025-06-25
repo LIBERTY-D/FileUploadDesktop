@@ -1,0 +1,58 @@
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg relative max-h-[90vh] overflow-y-auto"
+  >
+    <button
+      (click)="closeModal()"
+      class="absolute top-3 right-3 text-gray-500 hover:text-black text-xl font-bold cursor-pointer"
+    >
+      &times;
+    </button>
+    <h2 class="text-lg font-semibold mb-4">File Preview</h2>
+
+    <img
+      *ngIf="fileUrl && fileType.startsWith('image/')"
+      [src]="fileUrl"
+      class="max-w-full rounded shadow"
+    />
+    <iframe
+      *ngIf="fileUrl && fileType === 'application/pdf'"
+      [src]="fileUrl"
+      width="100%"
+      height="600px"
+      class="border rounded"
+    ></iframe>
+    <audio
+      *ngIf="fileUrl && fileType.startsWith('audio/')"
+      controls
+      class="mt-4 w-full"
+    >
+      <source [src]="fileUrl" />
+    </audio>
+    <video
+      *ngIf="fileUrl && fileType.startsWith('video/')"
+      controls
+      class="mt-4 w-full"
+    >
+      <source [src]="fileUrl" />
+    </video>
+    <div
+      *ngIf="docxHtml"
+      class="mt-4 prose max-w-full"
+      [innerHTML]="docxHtml"
+    ></div>
+
+    <pre
+      *ngIf="textContent"
+      class="mt-4 bg-gray-100 p-4 rounded overflow-auto whitespace-pre-wrap text-sm text-gray-800"
+      >{{ textContent }}</pre
+    >
+
+    <div *ngIf="!fileUrl && !textContent && !docxHtml" class="text-gray-500">
+      Unsupported file type or preview not available.
+    </div>
+  </div>
+</div>

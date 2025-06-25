@@ -1,0 +1,24 @@
+<section class="w-full">
+  <div class="w-96">
+    <div
+      class="flex items-center rounded-md py-2 px-2 ring-2 ring-gray-200 focus:ring-blue-300"
+    >
+      <span class="material-icons"> search </span>
+      <input
+        *ngIf="clickedSiderBarComponent.valueOf() == 0"
+        type="text"
+        placeholder="search file in your files..."
+        class="outline-0 h-full m-0 border-0 w-full"
+        (keyup)="onChangeInputSearch($event.target!)"
+      />
+      <input
+        *ngIf="clickedSiderBarComponent.valueOf() == 1"
+        type="text"
+        placeholder="search file in trash..."
+        class="outline-0 h-full m-0 border-0 w-full"
+        (keyup)="onChangeInputSearch($event.target!)"
+      />
+    </div>
+  </div>
+  <app-table [clickedSiderBarComponent]="clickedSiderBarComponent" />
+</section>

@@ -1,0 +1,139 @@
+<section class="relative">
+  <button (click)="loginDemoAccountUser()" class="absolute right-1.5 top-1">
+    Login Demo
+  </button>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <app-toast-message
+      [isVisible]="errOrSuccces.show"
+      [message]="errOrSuccces.message"
+      [type]="errOrSuccces.type"
+    />
+    <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
+      <h2 class="text-xl font-semibold mb-6 text-center text-gray-800">
+        {{ isLoginMode ? "Login to Your Account" : "Create a New Account" }}
+      </h2>
+
+      <form
+        class="space-y-4"
+        [formGroup]="myForm"
+        (ngSubmit)="submitFormData()"
+      >
+        <!-- Only show on signup -->
+        <div *ngIf="!isLoginMode">
+          <label class="block text-sm text-gray-600 mb-1">Name</label>
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="Jane"
+            class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          />
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('name', 'required')"
+          >
+            Name is required
+          </span>
+
+          <label class="block text-sm text-gray-600 mb-1 mt-4">Surname</label>
+          <input
+            formControlName="surname"
+            type="text"
+            placeholder="Doe"
+            class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          />
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('surname', 'required')"
+          >
+            Surname is required
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Email</label>
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="you@example.com"
+            class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          />
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('email', 'required')"
+          >
+            Email is required
+          </span>
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('email', 'email')"
+          >
+            Email format is invalid
+          </span>
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Password</label>
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="••••••••"
+            class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          />
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('password', 'required')"
+          >
+            Password is required
+          </span>
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="hasError('password', 'minlength')"
+          >
+            Password does not meet required length
+          </span>
+        </div>
+
+        <!-- Confirm password for signup -->
+        <div *ngIf="!isLoginMode">
+          <label class="block text-sm text-gray-600 mb-1"
+            >Confirm Password</label
+          >
+          <input
+            formControlName="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+          />
+
+          <span
+            class="ml-1 text-red-400 italic capitalize"
+            *ngIf="myForm.errors?.['passwordMismatch'] && (myForm.dirty || myForm.touched)"
+          >
+            Passords do not match or required
+          </span>
+        </div>
+
+        <button
+          [disabled]="!isFormValid()"
+          type="submit"
+          class="w-full bg-cyan-400 text-white py-2 rounded-md hover:bg-cyan-800 transition cursor-pointer"
+        >
+          {{ isLoginMode ? "Login" : "Sign Up" }}
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-gray-500 mt-4">
+        {{
+          isLoginMode ? "Don't have an account?" : "Already have an account?"
+        }}
+        <button
+          type="button"
+          (click)="toggleMode()"
+          class="text-gray-800 font-medium hover:underline ml-1"
+        >
+          {{ isLoginMode ? "Sign Up" : "Login" }}
+        </button>
+      </p>
+    </div>
+  </div>
+</section>

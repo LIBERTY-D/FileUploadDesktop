@@ -1,0 +1,256 @@
+@if (user) {
+<div class="w-full min-h-screen bg-gray-100 px-6 py-10 space-y-8">
+  <!-- Go Back Home Button -->
+  <div class="w-full flex justify-start mb-4">
+    <a
+      routerLink="/"
+      class="inline-flex items-center cursor-pointer text-white bg-blue-600 hover:bg-blue-700 font-medium px-4 py-2 rounded-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4 mr-2"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+      Go Back Home
+    </a>
+  </div>
+
+  <app-toast-message
+    [isVisible]="errOrSuccces.show"
+    [type]="errOrSuccces.type"
+    [message]="errOrSuccces.message"
+  />
+
+  <!-- Profile Info -->
+  <div class="bg-white rounded-xl shadow p-6 space-y-6 border border-gray-200">
+    <div class="flex items-center gap-6 relative">
+      <div class="relative group">
+        <img
+          [src]="user.profilePicture?user.profilePicture:'assets/blank.jpg'"
+          alt="Profile"
+          class="w-20 h-20 rounded-full border border-gray-50 object-cover"
+        />
+        <label
+          *ngIf="editMode"
+          for="profileUpload"
+          class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white rounded-full cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+          title="Change profile picture"
+        >
+          ✏️
+        </label>
+        <input
+          id="profileUpload"
+          type="file"
+          accept="image/*"
+          (change)="onProfilePicChange($event)"
+          class="hidden"
+        />
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">
+          {{ user.firstName + " " + user.lastName }}
+        </h2>
+        <p class="text-gray-600">{{ user.email }}</p>
+      </div>
+
+      <div class="absolute right-0 top-0">
+        <button
+          class="bg-red-500 text-white px-3 py-1 rounded-md"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Editable Form -->
+    <form class="space-y-4" *ngIf="editMode">
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >First Name</label
+        >
+        <input
+          [(ngModel)]="user.firstName"
+          name="firstname"
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+          [appCheckRoles]="user.roles"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Last Name</label>
+        <input
+          [(ngModel)]="user.lastName"
+          name="fullName"
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+          [appCheckRoles]="user.roles"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          [readOnly]="true"
+          [(ngModel)]="user.email"
+          name="email"
+          type="email"
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
+    </form>
+
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Roles</h3>
+      <ul class="list-inside list-none space-y-1 text-gray-600">
+        <li *ngFor="let role of user.roles">{{ role }}</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Last Logins</h3>
+      <ul class="list-inside list-none space-y-1 text-gray-600">
+        <li *ngFor="let login of user.logins">{{ login }}</li>
+      </ul>
+    </div>
+
+    <!-- Profile Edit Actions -->
+    <div class="flex justify-end gap-4">
+      <button
+        *ngIf="!editMode"
+        (click)="toggleEdit()"
+        class="cursor-pointer px-4 py-2 rounded-md bg-gray-500 text-white hover:bg-gray-600 text-sm"
+      >
+        Edit Profile
+      </button>
+
+      <ng-container *ngIf="editMode">
+        <button
+          (click)="saveChanges()"
+          class="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 text-sm"
+          [disabled]="user.roles[0] === 'ROLE_DEMO'"
+        >
+          Save
+        </button>
+        <button
+          (click)="cancelEdit()"
+          class="px-4 py-2 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 text-sm"
+        >
+          Cancel
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Account Settings Section -->
+  <div class="bg-white rounded-xl shadow p-6 space-y-4 border border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-800">Account Settings</h3>
+
+    <!-- <div class="p-4 border border-yellow-200 bg-yellow-50 rounded-md">
+        <p class="text-yellow-800 mb-2">
+          Temporarily disable your account. You can reactivate anytime by logging in.
+        </p>
+        <button
+          (click)="disableAccount()"
+          class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Disable Account
+        </button>
+      </div> -->
+
+    <!-- <div class="p-4 border border-blue-200 bg-blue-50 rounded-md">
+        <p class="text-blue-800 mb-2">
+          Reset your account to default state. All current data will be erased.
+        </p>
+        <button
+          (click)="resetAccount()"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Reset Account
+        </button>
+      </div> -->
+
+    <div class="p-4 border border-red-200 bg-red-50 rounded-md">
+      <p class="text-red-800 font-semibold mb-2">
+        Permanently delete your account. This action is irreversible.
+      </p>
+      <button
+        (click)="deleteAccount()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm"
+      >
+        Delete Account
+      </button>
+    </div>
+  </div>
+
+  <!-- Reset Password Section -->
+  <div class="bg-white rounded-xl shadow p-6 space-y-4 border border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-800">Update Password</h3>
+
+    <form
+      class="space-y-4"
+      (ngSubmit)="updatePasswordForm()"
+      #resetForm="ngForm"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >Current Password</label
+        >
+        <input
+          type="password"
+          name="currentPassword"
+          [(ngModel)]="resetPasswordData.currentPassword"
+          required
+          minlength="6"
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+        <div
+          *ngIf="
+            resetPasswordDataError.show &&
+            resetPasswordDataError.currentPassword.length > 0
+          "
+          class="text-red-500 text-sm"
+        >
+          {{ resetPasswordDataError.currentPassword }}
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >New Password</label
+        >
+        <input
+          type="password"
+          name="newPassword"
+          [(ngModel)]="resetPasswordData.newPassword"
+          required
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+        <div
+          *ngIf="
+            resetPasswordDataError.show &&
+            resetPasswordDataError.newPassword.length > 0
+          "
+          class="text-red-500 text-sm"
+        >
+          {{ resetPasswordDataError.newPassword }}
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm"
+      >
+        Update Password
+      </button>
+    </form>
+  </div>
+</div>
+}

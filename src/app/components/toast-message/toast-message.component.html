@@ -1,0 +1,16 @@
+<div *ngIf="isVisible"
+  class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-3 rounded-md shadow-md border-l-4 flex items-start justify-between gap-4 min-w-[300px] max-w-sm transition-all duration-300"
+  [ngClass]="{
+    'bg-green-50 border-green-600 text-green-800': type === 'success',
+    'bg-red-50 border-red-600 text-red-800': type === 'error'
+  }"
+>
+  <span class="flex-1">{{ message }}</span>
+  <button
+    (click)="closeToast()"
+    class="text-xl font-bold text-gray-600 hover:text-gray-800 transition cursor-pointer"
+    aria-label="Close"
+  >
+    &times;
+  </button>
+</div>

@@ -1,0 +1,17 @@
+<app-toast-message
+  [message]="errOrSuccces.message"
+  [type]="errOrSuccces.type"
+  [isVisible]="errOrSuccces.show"
+/>
+<section class="flex w-full gap-5">
+  <app-sidebar [onClickSiderBar]="onClickSiderBar" class="flex-1" />
+  <app-searchbar
+    [clickedSiderBarComponent]="clickedSiderBarComponent"
+    class="flex-3 mt-5"
+  />
+  <app-account-top-sect  *ngIf="user" [goToAccountPage]="goToAccountPage" class="items-end"/>
+  <div class="pt-2  ">
+
+    <button *ngIf="!user" (click)="goToAuthPage()">create/login</button>
+  </div>
+</section>
