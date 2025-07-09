@@ -49,12 +49,7 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ],
-              "optimization": {
-                "scripts": true,
-                "styles": false,
-                "fonts": true
-              }
+              ]
             },
             "development": {
               "optimization": false,
