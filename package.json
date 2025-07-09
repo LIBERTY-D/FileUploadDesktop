@@ -1,10 +1,14 @@
 {
   "name": "uploader-app",
   "version": "0.0.0",
-  "scripts": {
+ 
+ "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "prebuild": "node set-env.js production",
+    "build": "ng build --configuration production",
+    "vercel-build": "npm install --legacy-peer-deps && npm run prebuild && npm run build",
+    "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
